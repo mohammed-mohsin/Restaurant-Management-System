@@ -23,7 +23,7 @@
 <body>
     <div id="app">
         <div class="wrapper ">
-            @include('layouts.partial.sidebar')
+            @include('layouts.partial.topbar')
             <div class="main-panel">
                 <!-- Navbar -->
                 @include("layouts.partial.sidebar")

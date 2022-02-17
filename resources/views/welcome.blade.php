@@ -84,6 +84,8 @@
                     <li><a href="#featured-dish">featured</a></li>
                     <li><a href="#reserve">reservation</a></li>
                     <li><a href="#contact">contact</a></li>
+                    <li><a href="{{route('login')}}">Login</a></li>
+                    <li><a href="{{route('register')}}">Register</a></li>
                 </ul>
             </div><!-- /.navbar-collapse -->
         </div><!-- /.row -->
