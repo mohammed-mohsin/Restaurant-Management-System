@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('Title', 'Create | Slider')
+@section('Title', 'Edit | Slider')
 
 @section('content')
 
@@ -10,24 +10,25 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header card-header-primary">
-                        <h4 class="card-title">Create New Slider</h4>
+                        <h4 class="card-title">Edit</h4>
                         <!-- <p class="card-category">Complete your profile</p> -->
                     </div>
                     <div class="card-body">
 
-                        <form action="{{route('slider.store')}}" method="POST" enctype="multipart/form-data">
+                        <form action="{{route('slider.update',$slider->id)}}" method="POST" enctype="multipart/form-data">
                             @csrf
+                            @method('PUT')
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <label class="bmd-label-floating">Title</label>
-                                        <input type="text" name="title" class="form-control">
+                                        <input type="text" value="{{$slider->title}}" name="title" class="form-control">
                                     </div>
                                 </div>
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <label class="bmd-label-floating">Subtitle</label>
-                                        <input type="text" name="sub_title" class="form-control">
+                                        <input type="text" value="{{$slider->sub_title}}" name="sub_title" class="form-control">
 
 
                                     </div>
@@ -46,8 +47,7 @@
                                     <!-- </div> -->
                                 </div>
                                 <div class="col-md-6">
-                                    <img id="blah" src="https://via.placeholder.com/500
-C/O https://placeholder.com/" alt="your image" width="500" height="300" />
+                                    <img id="blah" src="{{asset('uploads/slider/'.$slider->image)}}" alt="your image" width="500" height="300" />
 
                                 </div>
                             </div>

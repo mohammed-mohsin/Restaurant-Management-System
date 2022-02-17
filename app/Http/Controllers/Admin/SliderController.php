@@ -39,9 +39,33 @@ class SliderController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validate($request,[
-            'title'=>'required'
+        $this->validate($request, [
+            'title' => 'required',
+            'sub_title' => 'required',
+            'image' => 'required'
         ]);
+        $image = $request->file('image');
+        $slug = str_slug($request->title);
+
+        if (isset($image)) {
+            $current_Date = Carbon::now()->toDateString();
+            $imageName = $slug . '-' . $current_Date . '.' . $image->getClientOriginalExtension();
+            if (!file_exists('uploads/slider')) {
+
+                mkdir('uploads/slider', 077, true);
+            }
+            $image->move('uploads/slider', $imageName);
+        } else {
+            $imageName = 'default.png';
+        }
+
+        $slider = new Slider();
+        $slider->title = $request->title;
+        $slider->sub_title = $request->sub_title;
+        $slider->image = $imageName;
+
+        $slider->save();
+        return redirect()->route('slider.index');
     }
 
     /**
@@ -63,7 +87,8 @@ class SliderController extends Controller
      */
     public function edit($id)
     {
-        //
+        $slider = Slider::find($id);
+        return view('admin.slider.edit', compact('slider'));
     }
 
     /**
@@ -75,7 +100,34 @@ class SliderController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $this->validate($request, [
+            'title' => 'required',
+            'sub_title' => 'required',
+            'image' => 'required'
+        ]);
+        $slider =  Slider::find($id);
+        $image = $request->file('image');
+        $slug = str_slug($request->title);
+
+        if (isset($image)) {
+            $current_Date = Carbon::now()->toDateString();
+            $imageName = $slug . '-' . $current_Date . '.' . $image->getClientOriginalExtension();
+            if (!file_exists('uploads/slider')) {
+
+                mkdir('uploads/slider', 077, true);
+            }
+            $image->move('uploads/slider', $imageName);
+        } else {
+            $imageName = $slider->image;
+        }
+
+       
+        $slider->title = $request->title;
+        $slider->sub_title = $request->sub_title;
+        $slider->image = $imageName;
+
+        $slider->save();
+        return redirect()->route('slider.index');
     }
 
     /**
@@ -86,6 +138,10 @@ class SliderController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $slider = Slider::find($id);
+ 
+
+        $slider->delete();
+        return redirect()->route('slider.index');
     }
 }
