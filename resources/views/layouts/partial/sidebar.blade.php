@@ -18,6 +18,12 @@
                             </a>
                         </li>
                         <li class="nav-item ">
+                            <a class="nav-link" href="{{route('slider.index')}}">
+                                <i class="material-icons">ViewCarouselIcon </i>
+                                <p>User Profile</p>
+                            </a>
+                        </li>
+                        <li class="nav-item ">
                             <a class="nav-link" href="./user.html">
                                 <i class="material-icons">person</i>
                                 <p>User Profile</p>
