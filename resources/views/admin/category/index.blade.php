@@ -1,7 +1,6 @@
 @extends('layouts.app')
 
-@section('Title', 'Slider')
-
+@section('Title', 'Category')
 @push('css')
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.css">
@@ -15,11 +14,11 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-12">
-                <a href="{{route('slider.create')}}" class="btn btn-primary">Create</a>
+                <a href="{{route('category.create')}}" class="btn btn-primary">Create</a>
                 <div class="card">
 
                     <div class="card-header card-header-primary">
-                        <h4 class="card-title ">Slider Table</h4>
+                        <h4 class="card-title ">All Categories</h4>
                         <!-- <p class="card-category"> Here is a subtitle for this table</p> -->
                     </div>
                     <div class="card-body">
@@ -30,43 +29,39 @@
                                         Serial
                                     </th>
                                     <th>
-                                        Title
+                                        Name
                                     </th>
                                     <th>
-                                        Sub Title
+                                       Slug
                                     </th>
-                                    <th>
-                                        Image
-                                    </th>
+                                   
                                     <th>
                                         Action
                                     </th>
                                 </thead>
                                 <tbody>
-                                    @foreach($sliders as $key=>$slider)
+                                    @foreach($categories as $key=>$category)
                                     <tr>
                                         <td>
                                             {{$key+1}}
                                         </td>
                                         <td>
-                                            {{$slider->title}}
+                                            {{$category->name}}
                                         </td>
                                         <td>
-                                            {{$slider->sub_title}}
+                                            {{$category->slug}}
                                         </td>
+                                      
                                         <td>
-                                            <img src="{{asset('uploads/slider/'.$slider->image)}}" width="300" height="150" alt="{{$slider->title}}">
-                                        </td>
-                                        <td>
-                                            <a href="{{route('slider.edit',$slider->id)}}" class="btn btn-info"><i class="material-icons">edit</i></a>
+                                            <a href="{{route('category.edit',$category->id)}}" class="btn btn-info"><i class="material-icons">edit</i></a>
 
-                                            <!-- <a href="{{route('slider.destroy',$slider->id)}}" class="btn btn-danger"><i class="material-icons">delete</i></a> -->
+                                            <!-- <a href="{{route('category.destroy',$category->id)}}" class="btn btn-danger"><i class="material-icons">delete</i></a> -->
 
-                                            <form action="{{route('slider.destroy',$slider->id)}}" method="POST">
+                                            <form action="{{route('category.destroy',$category->id)}}" class="d-inline" method="POST">
 
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" class="btn btn-danger"><i class="material-icons">delete</i></button>
+                                                <button type="submit"  class="btn btn-danger"><i class="material-icons">delete</i></button>
                                             </form>
                                         </td>
                                     </tr>

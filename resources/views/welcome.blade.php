@@ -17,12 +17,19 @@
     <link rel="stylesheet" href="{{asset('frontend/css/flexslider.css')}}">
     <link rel="stylesheet" href="{{asset('frontend/css/pricing.css')}}">
     <link rel="stylesheet" href="{{asset('frontend/css/main.css')}}">
-
+    <link rel="stylesheet" href="{{asset('frontend/css/bootstrap-datetimepicker.min.css')}}">
+   
     <style>
         @foreach($sliders as $key=>$slider);
 
         .owl-carousel .owl-wrapper,
-        .owl-carousel .owl-item:nth-child({{$key+1}}) .item {
+        .owl-carousel .owl-item:nth-child( {
+                    {
+                    $key+1
+                }
+            }
+
+        ) .item {
             background: url("{{asset('uploads/slider'.$slider->image)}}");
             background-size: cover;
         }
@@ -101,6 +108,7 @@
             </div><!-- /.navbar-collapse -->
         </div><!-- /.row -->
     </nav>
+    
 
 
     <!--== 5. Header ==-->
@@ -157,10 +165,14 @@
                                     <h2 class="pricing-title">Affordable Pricing</h2>
                                     <ul id="filter-list" class="clearfix">
                                         <li class="filter" data-filter="all">All</li>
-                                        <li class="filter" data-filter=".breakfast">Breakfast</li>
+                                        @foreach($categories as $key=>$category);
+                                        <li class="filter" data-filter=".{{$category->slug}}">{{$category->name}}</li>
+                                        @endforeach
+                                        <!-- 
+                                         <li class="filter" data-filter=".breakfast">Breakfast</li>
                                         <li class="filter" data-filter=".special">Special</li>
                                         <li class="filter" data-filter=".desert">Desert</li>
-                                        <li class="filter" data-filter=".dinner">Dinner</li>
+                                        <li class="filter" data-filter=".dinner">Dinner</li> -->
                                     </ul><!-- @end #filter-list -->
                                 </div>
                             </div>
@@ -173,22 +185,27 @@
                 <div class="row">
                     <div class="col-md-10 col-md-offset-1">
                         <ul id="menu-pricing" class="menu-price">
-                            <li class="item dinner">
+                            @foreach($items as $key=>$item);
+                            <li class="item {{$item->category->slug}}">
 
                                 <a href="#">
-                                    <img src="images/food1.jpg" class="img-responsive" alt="Food">
+                                    <!-- src="{{asset('uploads/slider/'.$slider->image)}}" -->
+                                    <img src="{{asset('uploads/item/'.$item->image)}}" class="img-responsive" alt="{{$item->name}}">
                                     <div class="menu-desc text-center">
                                         <span>
-                                            <h3>Tomato Curry</h3>
-                                            Natalie &amp; Justin Cleaning by Justin Younger
+                                            <h3>{{$item->name}}</h3>
+                                            {{$item->description}}
+                                            <!-- Natalie &amp; Justin Cleaning by Justin Younger -->
                                         </span>
                                     </div>
                                 </a>
 
-                                <h2 class="white">$20</h2>
+                                <h2 class="white">${{$item->price}}</h2>
                             </li>
 
-                            <li class="item breakfast">
+                            @endforeach
+
+                            <!-- <li class="item breakfast">
 
                                 <a href="#">
                                     <img src="images/food2.jpg" class="img-responsive" alt="Food">
@@ -299,7 +316,7 @@
                                 </a>
 
                                 <h2 class="white">$38</h2>
-                            </li>
+                            </li> -->
                         </ul>
 
                         <!-- <div class="text-center">
@@ -773,7 +790,8 @@
                 <div class=" section-content">
                     <div class="row">
                         <div class="col-md-5 col-sm-6">
-                            <form class="reservation-form" method="post" action="reserve.php">
+                            <form class="reservation" method="POST" action="{{route('reservation.store')}}">
+                                @csrf
                                 <div class="row">
                                     <div class="col-md-6 col-sm-6">
                                         <div class="form-group">
@@ -789,7 +807,7 @@
                                             <input type="tel" class="form-control reserve-form empty iconified" name="phone" id="phone" required="required" placeholder="  &#xf095;  Phone">
                                         </div>
                                         <div class="form-group">
-                                            <input type="text" class="form-control reserve-form empty iconified" name="datepicker" id="datepicker" required="required" placeholder="&#xf017;  Time">
+                                            <input type="text" class="form-control reserve-form empty iconified" name="date_and_time" id="form_datetime" required="required" placeholder="&#xf017;  Time">
                                         </div>
                                     </div>
 
@@ -934,6 +952,21 @@
     <script type="text/javascript" src="{{asset('frontend/js/jquery.hoverdir.js')}}"></script>
     <script type="text/javascript" src="{{asset('frontend/js/jQuery.scrollSpeed.js')}}"></script>
     <script src="{{asset('frontend/js/script.js')}}"></script>
+    <script src="{{asset('frontend/js/bootstrap-datetimepicker.min.js')}}"></script>
+
+   <script type="text/javascript">
+           $('#form_datetime').datetimepicker({
+        //language:  'fr',
+        weekStart: 1,
+        todayBtn:  1,
+		autoclose: 1,
+		todayHighlight: 1,
+		startView: 2,
+		forceParse: 0,
+        showMeridian: 1
+    });
+    </script>
+
 
 
 </body>

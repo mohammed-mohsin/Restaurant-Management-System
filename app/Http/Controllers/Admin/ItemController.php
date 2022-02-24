@@ -3,11 +3,12 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Slider;
+use App\Models\Category;
+use App\Models\Item;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
-class SliderController extends Controller
+class ItemController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,9 +17,8 @@ class SliderController extends Controller
      */
     public function index()
     {
-
-        $sliders = Slider::all();
-        return view('admin.slider.index', compact('sliders'));
+        $items = Item::all();
+        return view('admin.item.index', compact('items'));
     }
 
     /**
@@ -28,7 +28,8 @@ class SliderController extends Controller
      */
     public function create()
     {
-        return view('admin.slider.create');
+        $categories = Category::all();
+        return view('admin.item.create', compact('categories'));
     }
 
     /**
@@ -40,32 +41,36 @@ class SliderController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'title' => 'required',
-            'sub_title' => 'required',
+            'name' => 'required',
+            'description' => 'required',
+            'price' => 'required',
+            'category' => 'required',
             'image' => 'required'
         ]);
         $image = $request->file('image');
-        $slug = str_slug($request->title);
+        $slug = str_slug($request->name);
 
         if (isset($image)) {
             $current_Date = Carbon::now()->toDateString();
             $imageName = $slug . '-' . $current_Date . '.' . $image->getClientOriginalExtension();
-            if (!file_exists('uploads/slider')) {
+            if (!file_exists('uploads/item')) {
 
-                mkdir('uploads/slider', 077, true);
+                mkdir('uploads/item', 077, true);
             }
-            $image->move('uploads/slider', $imageName);
+            $image->move('uploads/item', $imageName);
         } else {
             $imageName = 'default.png';
         }
 
-        $slider = new Slider();
-        $slider->title = $request->title;
-        $slider->sub_title = $request->sub_title;
-        $slider->image = $imageName;
+        $item = new item();
+        $item->name = $request->name;
+        $item->description = $request->description;
+        $item->price = $request->price;
+        $item->category_id = $request->category;
+        $item->image = $imageName;
 
-        $slider->save();
-        return redirect()->route('slider.index');
+        $item->save();
+        return redirect()->route('item.index');
     }
 
     /**
@@ -87,8 +92,9 @@ class SliderController extends Controller
      */
     public function edit($id)
     {
-        $slider = Slider::find($id);
-        return view('admin.slider.edit', compact('slider'));
+        $item = item::find($id);
+        $categories = Category::all();
+        return view('admin.item.edit', compact('item', 'categories'));
     }
 
     /**
@@ -101,33 +107,38 @@ class SliderController extends Controller
     public function update(Request $request, $id)
     {
         $this->validate($request, [
-            'title' => 'required',
-            'sub_title' => 'required',
+            'name' => 'required',
+            'description' => 'required',
+            'price' => 'required',
+            'category' => 'required',
             'image' => 'required'
         ]);
-        $slider =  Slider::find($id);
+        $item =  Item::find($id);
         $image = $request->file('image');
-        $slug = str_slug($request->title);
+        $slug = str_slug($request->name);
 
         if (isset($image)) {
             $current_Date = Carbon::now()->toDateString();
             $imageName = $slug . '-' . $current_Date . '.' . $image->getClientOriginalExtension();
-            if (!file_exists('uploads/slider')) {
+            if (!file_exists('uploads/item')) {
 
-                mkdir('uploads/slider', 077, true);
+                mkdir('uploads/item', 077, true);
             }
-            $image->move('uploads/slider', $imageName);
+            $image->move('uploads/item', $imageName);
         } else {
-            $imageName = $slider->image;
+            $imageName = $item->image;
         }
 
-       
-        $slider->title = $request->title;
-        $slider->sub_title = $request->sub_title;
-        $slider->image = $imageName;
 
-        $slider->save();
-        return redirect()->route('slider.index');
+
+        $item->name = $request->name;
+        $item->description = $request->description;
+        $item->price = $request->price;
+        $item->category_id = $request->category;
+        $item->image = $imageName;
+
+        $item->save();
+        return redirect()->route('item.index');
     }
 
     /**
@@ -138,12 +149,11 @@ class SliderController extends Controller
      */
     public function destroy($id)
     {
-        $slider = Slider::find($id);
- 
-        if (file_exists('uploads/slider',$slider->image)) {   
-            unlink('uploads/slider',$slider->image);
+        $item = Item::find($id);
+        if (file_exists('uploads/item'.$item->image)) {   
+            unlink('uploads/item'.$item->image);
         };
-        $slider->delete();
-        return redirect()->route('slider.index');
+        $item->delete();
+        return redirect()->route('item.index');
     }
 }

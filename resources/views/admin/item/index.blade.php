@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('Title', 'Slider')
+@section('Title', 'Item')
 
 @push('css')
 
@@ -15,11 +15,11 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-12">
-                <a href="{{route('slider.create')}}" class="btn btn-primary">Create</a>
+                <a href="{{route('item.create')}}" class="btn btn-primary">Create</a>
                 <div class="card">
 
                     <div class="card-header card-header-primary">
-                        <h4 class="card-title ">Slider Table</h4>
+                        <h4 class="card-title ">item Table</h4>
                         <!-- <p class="card-category"> Here is a subtitle for this table</p> -->
                     </div>
                     <div class="card-body">
@@ -30,39 +30,50 @@
                                         Serial
                                     </th>
                                     <th>
-                                        Title
-                                    </th>
-                                    <th>
-                                        Sub Title
+                                        Name
                                     </th>
                                     <th>
                                         Image
                                     </th>
                                     <th>
+                                        Category
+                                    </th>
+                                    <th>
+                                        Price
+                                    </th>
+                                    Description
+                                    <th>
                                         Action
                                     </th>
                                 </thead>
                                 <tbody>
-                                    @foreach($sliders as $key=>$slider)
+                                    @foreach($items as $key=>$item)
                                     <tr>
                                         <td>
                                             {{$key+1}}
                                         </td>
                                         <td>
-                                            {{$slider->title}}
+                                            {{$item->name}}
+                                        </td>
+                                       
+                                        <td>
+                                            <img src="{{asset('uploads/item/'.$item->image)}}" width="300" height="150" alt="{{$item->title}}">
                                         </td>
                                         <td>
-                                            {{$slider->sub_title}}
+                                            {{$item->category->name}}
                                         </td>
                                         <td>
-                                            <img src="{{asset('uploads/slider/'.$slider->image)}}" width="300" height="150" alt="{{$slider->title}}">
+                                            {{$item->price}}
                                         </td>
                                         <td>
-                                            <a href="{{route('slider.edit',$slider->id)}}" class="btn btn-info"><i class="material-icons">edit</i></a>
+                                            {{$item->description}}
+                                        </td>
+                                        <td>
+                                            <a href="{{route('item.edit',$item->id)}}" class="btn btn-info"><i class="material-icons">edit</i></a>
 
-                                            <!-- <a href="{{route('slider.destroy',$slider->id)}}" class="btn btn-danger"><i class="material-icons">delete</i></a> -->
+                                            <!-- <a href="{{route('item.destroy',$item->id)}}" class="btn btn-danger"><i class="material-icons">delete</i></a> -->
 
-                                            <form action="{{route('slider.destroy',$slider->id)}}" method="POST">
+                                            <form action="{{route('item.destroy',$item->id)}}" method="POST">
 
                                                 @csrf
                                                 @method('DELETE')
